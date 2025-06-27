@@ -1,16 +1,21 @@
 import asyncio
-from aiogram import Bot, Dispatcher
+from aiogram import Bot, Dispatcher, types
+from aiogram.enums import ParseMode
 from aiogram.types import Message
-from aiogram.filters import CommandStart
+from aiogram.fsm.storage.memory import MemoryStorage
 
-BOT_TOKEN = "YOUR_BOT_TOKEN_HERE"
+import logging
+import os
 
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+TOKEN = os.getenv("BOT_TOKEN", "your-token-here")
 
-@dp.message(CommandStart())
-async def on_start(message: Message):
-    await message.answer("Привет! Бот работает на Python 3.13.4 и Aiogram 3.5.0")
+logging.basicConfig(level=logging.INFO)
+bot = Bot(token=TOKEN, parse_mode=ParseMode.HTML)
+dp = Dispatcher(storage=MemoryStorage())
+
+@dp.message()
+async def echo(message: Message):
+    await message.answer(f"Вы написали: {message.text}")
 
 async def main():
     await dp.start_polling(bot)
