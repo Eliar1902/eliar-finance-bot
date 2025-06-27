@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: eliar-finance-bot
+    runtime: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python main.py"
+    pythonVersion: 3.13.4
